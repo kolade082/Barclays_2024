@@ -24,18 +24,22 @@
             </form>
         </div>
         <div class="applications">
-            <a href="#applicaion">
-                <div class="application">
-                    <h1>Applicant Name</h1>
-                    
-                </div>
-            </a>
-            <a href="#applicaion">
-                <div class="application">
-                    <h1>Applicant Name</h1>
-                    
-                </div>
-            </a>
+            <div>
+            <a href="#applicaion1">
+                    <div class="application">
+                        <h2>Applicant Name</h2>
+                        <h4>Credit Score: 999</h4>
+                        <h5>Category: Excelent</h5> 
+                    </div>
+                </a>
+                <a href="#applicaion2">
+                    <div class="application">
+                    <h2>Applicant Name</h2>
+                        <h4>Credit Score: 999</h4>
+                        <h5>Category: Excelent</h5> 
+                    </div>
+                </a>
+            </div>
         </div>
     </div>
 </section>
