@@ -36,6 +36,7 @@ header nav {
     justify-content: space-between;
     align-items: center;
     padding: 1rem 10%;
+    margin-top: -30px;
 }
 
 .logo {
@@ -51,6 +52,7 @@ header nav {
     padding: 8px 16px;
     border-radius: 4px;
     transition: background 0.3s;
+    margin-top: 28px;
 }
 
 .nav-links a:hover {
@@ -60,7 +62,7 @@ header nav {
 
 header div:last-child {
     display: flex;
-    margin-top: 8px;
+    margin-top: 28px;
 }
 
 .hero {
@@ -421,11 +423,12 @@ footer {
 
 .address-container {
     width: 100%;
-    max-width: 500px; /* Adjust the width as needed */
+    max-width: 80%;
+    min-height: 400px;
     background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin: 0 auto;
 }
 
@@ -465,4 +468,10 @@ footer {
 .btn-next:hover {
     background-color: #003087;
 }
+<<<<<<< HEAD
 
+=======
+.hidden {
+    display: none;
+}
+>>>>>>> 92cf5d21eade44b176428ef8629231480519a106
