@@ -36,6 +36,7 @@ header nav {
     justify-content: space-between;
     align-items: center;
     padding: 1rem 10%;
+    margin-top: -30px;
 }
 
 .logo {
@@ -51,6 +52,7 @@ header nav {
     padding: 8px 16px;
     border-radius: 4px;
     transition: background 0.3s;
+    margin-top: 28px;
 }
 
 .nav-links a:hover {
@@ -60,7 +62,7 @@ header nav {
 
 header div:last-child {
     display: flex;
-    margin-top: 8px;
+    margin-top: 28px;
 }
 
 .hero {
@@ -254,7 +256,21 @@ footer {
     /*margin-top: auto*/
 }
 
+.page-title{
+    position: static;
+    transform: none;
+    background-color: #EDFEFF;
+    width: 100%;
+    padding: 20px 0;
+    
+}
 
+.page-title>h1{
+    margin-left: 20px;
+    font-size: 2.875em;
+    line-height: 1.175;
+    color: #00395d;
+}
 
 
 
@@ -348,6 +364,7 @@ footer {
     margin-bottom: 0.5rem;
 }
 
+.form-group input[type="account_type"],
 .form-group input[type="text"],
 .form-group input[type="email"],
 .form-group input[type="password"] {
@@ -421,11 +438,12 @@ footer {
 
 .address-container {
     width: 100%;
-    max-width: 500px; /* Adjust the width as needed */
+    max-width: 80%;
+    min-height: 400px;
     background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin: 0 auto;
 }
 
@@ -515,4 +533,9 @@ footer {
 .dashboard-content{
     min-height: 90vh;
     
+}
+
+
+.hidden {
+    display: none;
 }
