@@ -130,6 +130,7 @@ class PageController
             'last_name' => $lastName,
             'date_of_birth' => $dob,
             'password' => $hashedPassword,
+            'user_type'=> 'USER'
         ];
 //        var_dump($userData);
 
