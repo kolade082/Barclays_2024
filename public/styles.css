@@ -256,7 +256,21 @@ footer {
     /*margin-top: auto*/
 }
 
+.page-title{
+    position: static;
+    transform: none;
+    background-color: #EDFEFF;
+    width: 100%;
+    padding: 20px 0;
+    
+}
 
+.page-title>h1{
+    margin-left: 20px;
+    font-size: 2.875em;
+    line-height: 1.175;
+    color: #00395d;
+}
 
 
 
@@ -350,6 +364,7 @@ footer {
     margin-bottom: 0.5rem;
 }
 
+.form-group input[type="account_type"],
 .form-group input[type="text"],
 .form-group input[type="email"],
 .form-group input[type="password"] {
@@ -468,10 +483,8 @@ footer {
 .btn-next:hover {
     background-color: #003087;
 }
-<<<<<<< HEAD
 
-=======
+
 .hidden {
     display: none;
 }
->>>>>>> 92cf5d21eade44b176428ef8629231480519a106

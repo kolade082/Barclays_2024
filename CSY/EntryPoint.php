@@ -12,6 +12,7 @@ class EntryPoint
             $page = $this->routes->getPage();
             $output = $this->loadTemplate('../templates/' . $page['template'], $page['variables']);
             $title = $page['title'];
+            $page_title = $page['title'];
 
             require '../templates/layout.html.php';
 
