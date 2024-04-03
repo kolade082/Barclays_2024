@@ -21,6 +21,7 @@
     <div>
         <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) : ?>
             <div class="logo">
+                
                 <a href="/" style="text-decoration: none; color: inherit;">
                     <img src="../images/logo.png" alt="Barclays Credit Logo" style="height: 80px;">
                 </a>
@@ -47,7 +48,7 @@
                 </div>';
             }
             ?>
-            
+
         <?php endif; ?>
     </div>
 </header>
