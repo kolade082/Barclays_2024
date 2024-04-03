@@ -1,29 +1,75 @@
 <main class="main-dashboard">
     <div class="dashboard-sidebar">
         <div class="dashboard-links">
-            <a href="dashboard">Dashboard</a>
-            <a href="patients">Manage Patients</a>
-            <a href="appointments">Appointments</a>
-            <a href="reports">Generate Reports</a>
-            <a href="analytics">Analytics</a>
+            <a class="btn btn-custom my-3" href="dashboard">Dashboard</a>
+            <a class="btn btn-custom my-3" href="patients">Manage Patients</a>
+
+            <a class="btn btn-custom my-3" href="#">Anomalies</a>
+            <a class="btn btn-custom my-3" href="#">Help?</a>
         </div>
     </div>
     <section class="dashboard-content">
         <h1>NHS Patient Record Dashboard</h1>
-
-        <div class="dashboard-section">
-            <h2>Recent Activity</h2>
-            <p>Overview of recent system usage, updates, and alerts.</p>
-
-        </div>
-
         <!-- Section for Real-Time Alerts -->
         <div class="dashboard-section">
             <h2>Real-Time Alerts</h2>
             <div id="realTimeAlerts">
                 <?=$html?>
             </div>
+            <div id="realTimeAlerts">
+                <div class="anomaly-item">
+                    <div class="anomaly-description">
+                        <p>Anomaly Detected: Discrepancy in patient record for Patient ID  124798000 </p>
+                    </div>
+                    <div class="view-details">
+                        <button onclick="viewDetails(this)"
+                                data-your-data="' . htmlspecialchars(json_encode($patient), ENT_QUOTES) . '"
+                                data-nhs-data="' . htmlspecialchars(json_encode($nhsData), ENT_QUOTES) . '">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            <div id="realTimeAlerts">
+                <div class="anomaly-item">
+                    <div class="anomaly-description">
+                        <p>Anomaly Detected: Discrepancy in patient record for Patient ID  927967800 </p>
+                    </div>
+                    <div class="view-details">
+                        <button onclick="viewDetails(this)"
+                                data-your-data="' . htmlspecialchars(json_encode($patient), ENT_QUOTES) . '"
+                                data-nhs-data="' . htmlspecialchars(json_encode($nhsData), ENT_QUOTES) . '">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
+
+        <div class="dashboard-section">
+            <h2>Recent Activity</h2>
+            <p>Overview of recent system usage, updates, and alerts.</p>
+            <div class="recent-activities">
+                <!-- Example Activity 1 -->
+                <div class="activity">
+                    <h3>New Patient Registration</h3>
+                    <p>John Doe was registered in the system. <span class="activity-date">2023-11-29</span></p>
+                </div>
+
+                <!-- Example Activity 2 -->
+                <div class="activity">
+                    <h3>Appointment Scheduled</h3>
+                    <p>An appointment was scheduled for Jane Smith. <span class="activity-date">2023-11-28</span></p>
+                </div>
+
+                <!-- More activities can be added here -->
+            </div>
+        </div>
+
+
 
         <!-- Modal Structure -->
         <div id="comparisonModal" class="modal">
@@ -54,45 +100,53 @@
 
     </section>
     <script>
-
-        function viewDetails(button) {
-            const yourData = JSON.parse(button.getAttribute('data-your-data'));
-            const nhsData = JSON.parse(button.getAttribute('data-nhs-data'));
-
-            // Format the data into HTML
-            document.getElementById('yourSystemData').innerHTML = formatData(yourData, "Your System Data");
-            document.getElementById('nhsSystemData').innerHTML = formatData(nhsData, "NHS Data");
-
-            // Display the modal
-            document.getElementById('comparisonModal').style.display = 'block';
-        }
-
-        function formatData(yourData, nhsData, title) {
+        function formatData(yourData, nhsData) {
             let comparisonHtml = `<div class="data-table">
-<!--        <h3>${title}</h3>-->
-        <table>`;
+        <table>
+        <thead>
+            <tr>
+                <th>Field</th>
+                <th>Your System Data</th>
+                <th>NHS System Data</th>
+            </tr>
+        </thead>
+        <tbody>`;
 
-            // List of fields to compare
-            const fields = ['id', 'firstname', 'lastname', 'dob', 'phone', 'email'];
+            const fields = ['firstname', 'lastname', 'dob', 'phone_number', 'email'];
 
             fields.forEach(field => {
                 const yourValue = yourData[field] || '';
                 const nhsValue = nhsData[field] || '';
                 const isCorrect = yourValue === nhsValue;
 
+                let backgroundColor = isCorrect ? '#90ee90' : '#ffcccb';
+
                 comparisonHtml += `<tr>
-            <th>${field.charAt(0).toUpperCase() + field.slice(1)}</th>
-            <td style="background-color: ${isCorrect ? '#90ee90' : '#ffcccb'}">
-                ${yourValue}
-            </td>
-            <td style="background-color: ${isCorrect ? '#90ee90' : '#ffcccb'}">
-                ${nhsValue}
-            </td>
+            <td class="field-name">${field.charAt(0).toUpperCase() + field.slice(1)}</td>
+            <td style="background-color: ${backgroundColor}">${yourValue}</td>
+            <td>${nhsValue}</td>
         </tr>`;
             });
 
-            comparisonHtml += `</table></div>`;
+            comparisonHtml += `</tbody>
+        </table></div>`;
             return comparisonHtml;
+        }
+
+
+        function viewDetails(button) {
+            const yourData = JSON.parse(button.getAttribute('data-your-data'));
+            const nhsData = JSON.parse(button.getAttribute('data-nhs-data'));
+
+            // Format the data into HTML
+            const comparisonHtml = formatData(yourData, nhsData);
+            document.getElementById('comparisonModal').querySelector('.comparison-container').innerHTML = comparisonHtml;
+
+            // Set the current anomaly element for use in keepData function
+            window.currentAnomalyElement = button.closest('.anomaly-item');
+
+            // Display the modal
+            document.getElementById('comparisonModal').style.display = 'block';
         }
 
 
@@ -102,9 +156,14 @@
         }
 
         function keepData() {
-            // Implement logic to keep the current data
-            console.log("Keep data logic goes here");
-            closeModal(); // Close the modal after action
+            // Close the modal
+            closeModal();
+
+            // Hide the last opened anomaly. This assumes that the `viewDetails` function
+            // sets a global variable to the currently viewed anomaly element.
+            if (window.currentAnomalyElement) {
+                window.currentAnomalyElement.style.display = 'none';
+            }
         }
 
         function overwriteData() {

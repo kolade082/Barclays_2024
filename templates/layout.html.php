@@ -1,3 +1,4 @@
+<?php //session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,43 +7,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- bootstrap import -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <title>Assess</title>
+    <link rel="stylesheet" href="../styles.css" media="screen">
+    <title>Barclays Credit</title>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 <body>
-
-    <header>
-        <div class="header-container">
-            <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) : ?>
-                <div class="auth-links">
-                    <p><a href="../admin/logout">Logout</a></p>
-                    <p><a href="../admin/dashboard">Dashboard</a></p>
-                </div>
-            <?php else : ?>
-                <div class="auth-links">
-                    <p><a href="../admin/register" class="admin-signup">Sign Up</a></p>
-                    <p><a href="../admin/login" class="admin-login">Login</a></p>
-                </div>
-            <?php endif; ?>
-            <nav>
-                <ul>
-                    <li><a href="/">Home</a></li>
-
-                    <li><a href="../about">About Us</a></li>
-                    <li><a href="../contact">Contact Us</a></li>
-                    <li><a href="../faqs">Faqs</a></li>
-                </ul>
-            </nav>
-
-        </div>
-    </header>
+<div class="page-container">
+<header>
     <div>
+        <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) : ?>
+            <div class="logo">
+                <a href="/" style="text-decoration: none; color: inherit;">Barclays Credit</a>
+            </div>
+
+            <div class="nav-links">
+                <p><a href="../admin/logout">Logout</a></p>
+                <p><a href="../admin/dashboard">Dashboard</a></p>
+            </div>
+        <?php else : ?>
+            <div class="logo">
+                <a href="/" style="text-decoration: none; color: inherit;">Barclays Credit</a>
+            </div>
+            <div class="nav-links">
+                <p><a href="./registerEmail">Sign Up</a></p>
+                <p><a href="../admin/login">Login</a></p>
+            </div>
+        <?php endif; ?>
+    </div>
+</header>
+    <div >
         <?= $output ?? ""; ?>
     </div>
 
 
-    <!-- Chat Box -->
+
     <div id="chatBox" class="chat-box" style="display: none;">
         <div class="chat-box-header">
             Chat with Us
@@ -51,9 +53,9 @@
         <div class="chat-box-messages">
             <!-- Preloaded Messages for Demo -->
             <div class="message user-message">Hello, I have a question.</div>
-            <div class="message admin-message">Sure, how can we assist you?</div>
-            <div class="message user-message">Can you tell me more about your services?</div>
-            <div class="message admin-message">Certainly! We offer a wide range of healthcare services...</div>
+            <div class="message admin-message">Hey I'm and AI, Marky, how can we assist you?</div>
+            <div class="message user-message">Did is there a change in the last name of record 9000000009?</div>
+            <div class="message admin-message">Yeah</div>
             <!-- More messages can be added here -->
         </div>
         <input type="text" id="chatInput" placeholder="Type a message..." class="chat-box-input">
@@ -65,11 +67,14 @@
         </button>
     </div>
 
-    <footer>
-        &copy; NHS <?= date('Y'); ?>
-    </footer>
-
-
+<footer>
+    <p>© 2024 Barclays Credit. All Rights Reserved.</p>
+</footer>
+    <!-- bootstrap import -->
+<!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"-->
+<!--            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"-->
+<!--            crossorigin="anonymous"></script>-->
+</div>
 </body>
 
 <script>

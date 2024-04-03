@@ -10,24 +10,23 @@ class PageController
 
     private $pdo;
 
-    private $dbJobs;
-    private $dbCat;
-    private $dbApp;
-    private $dbPat;
-    private $dbContact;
+    private DatabaseTable $dbUsers;
+    // private MyPDO $pdo; 
+    private array $get;
+    private array $post;
+    private Validations $validator;
 
     public function __construct(
         DatabaseTable $dbUsers,
-        DatabaseTable $dbPat,
-        DatabaseTable $dbContact,
         array $get,
         array $post
     ) {
         $myDb = new MyPDO();
         $this->pdo = $myDb->db();
-        $this->dbContact = $dbContact;
+        $this->dbUsers = $dbUsers;
         $this->get = $get;
         $this->post = $post;
+        $this->validator = new Validations();
     }
 
     public function home()
@@ -42,57 +41,176 @@ class PageController
         return ['template' => 'about.html.php', 'title' => 'About', 'variables' => []];
     }
 
-    public function contact()
+    public function registerEmail()
     {
-        $me = '';
-        if (isset($this->post['submit'])) {
-            $contact = [
-                'name' => $this->post['name'],
-                'telephone' => $this->post['telephone'],
-                'email' => $this->post['email'],
-                'enquiry' => $this->post['enquiry']
-            ];
+        $this->session();
+        $errors = [];
 
-            $this->dbContact->insert($contact);
-
-            $me = 'Complaint Received';
-        }
-        return ['template' => 'contact.html.php', 'title' => 'Contact', 'variables' => ['me' => $me]];
-    }
-
-    public function faqs()
-    {
-        return ['template' => 'faqs.html.php', 'title' => 'FAQs', 'variables' => []];
-    }
-
-    public function apply()
-    {
-        if (isset($this->post['submit'])) {
-            $fileName = '';
-            if (isset($_FILES['cv'])) {
-                if ($_FILES['cv']['error'] == 0) {
-
-                    $parts = explode('.', $_FILES['cv']['name']);
-
-                    $extension = end($parts);
-
-                    $fileName = uniqid() . '.' . $extension;
-
-                    move_uploaded_file($_FILES['cv']['tmp_name'], 'cvs/' . $fileName);
-                }
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($this->post['email'])) {
+//            var_dump($_POST);
+            $email = $this->post['email'] ?? '';
+            $errors = $this->validator->validateEmail($email);
+//            var_dump($email, $errors);
+            if (empty($errors)) {
+                $_SESSION['registration_email'] = $email;
+//                var_dump($_SESSION);
+                header('Location: registerPersonalDet');
+//                var_dump('Redirecting to registerPersonalDet');
+                exit;
             }
-            $applicants = [
-                'name' => $this->post['name'],
-                'email' => $this->post['email'],
-                'details' => $this->post['details'],
-                'jobId' => $this->post['jobId'],
-                'cv' => $fileName
-            ];
-            $applicants = $this->dbApp->insert($applicants);
-            return ['template' => 'complete.html.php', 'title' => 'Apply', 'variables' => []];
-        } else {
-            $job = $this->dbJobs->find("id", $this->get['id'])[0];
-            return ['template' => 'apply.html.php', 'title' => 'Apply', 'variables' => ["job" => $job]];
+        }
+
+        return [
+            'template' => 'registerEmail.html.php',
+            'title' => 'Register Email',
+            'variables' => [
+                'errors' => $errors
+            ]
+        ];
+    }
+
+    public function registerPersonalDet()
+    {
+        $this->session();
+        $errors = [];
+
+//        var_dump($_SESSION);
+        if (!isset($_SESSION['registration_email'])) {
+            header('Location: registerEmail');
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+//            var_dump($_POST);
+            // Collect the post data
+            $firstName = $this->post['first-name'] ?? '';
+            $lastName = $this->post['last-name'] ?? '';
+            $dobDay = $this->post['dob-day'] ?? '';
+            $dobMonth = $this->post['dob-month'] ?? '';
+            $dobYear = $this->post['dob-year'] ?? '';
+            $dob = $dobYear . '-' . $dobMonth . '-' . $dobDay;
+            $password = $this->post['password'] ?? '';
+
+            // Validate the personal details here
+            $errors['first-name'] = $this->validator->validateFirstName($firstName);
+            $errors['last-name'] = $this->validator->validateLastName($lastName);
+            $errors['dob'] = $this->validator->validateDob($dob);
+            $errors['password'] = $this->validator->validatePassword($password);
+
+            $errors = array_filter($errors);
+//            var_dump($errors);
+            if (empty($errors)) {
+                $this->saveUserPersonalDetails($firstName, $lastName, $dob, $password);
+                header('Location: registerAddress');
+                exit;
+            }
+        }
+
+        return [
+            'template' => 'registerPersonalDet.html.php',
+            'title' => 'Register Personal Details',
+            'variables' => [
+                'errors' => $errors
+            ]
+        ];
+    }
+
+    private function saveUserPersonalDetails($firstName, $lastName, $dob, $password)
+    {
+        // Assuming $_SESSION['registration_email'] is already set
+        $email = $_SESSION['registration_email'];
+
+        // Hash the password for security
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        // Prepare the user data array
+        $userData = [
+            'email' => $email,
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'date_of_birth' => $dob,
+            'password' => $hashedPassword,
+        ];
+//        var_dump($userData);
+
+        $this->dbUsers->insert($userData);
+
+        $_SESSION['personal_details_set'] = true;
+    }
+
+    public function registerAddress()
+    {
+        $this->session();
+        $errors = [];
+
+        if (!isset($_SESSION['personal_details_set'])) {
+            header('Location: registerPersonalDet');
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Collect address details from POST data
+            $addressLine1 = $this->post['address-line1'] ?? '';
+            $addressLine2 = $this->post['address-line2'] ?? ''; // Optional
+            $city = $this->post['city'] ?? '';
+            $postcode = $this->post['postcode'] ?? '';
+            $country = $this->post['country'] ?? '';
+
+            // Validate the address details
+            $errors['address-line1'] = $this->validator->validateAddressLine($addressLine1);
+            $errors['city'] = $this->validator->validateCity($city);
+            $errors['postcode'] = $this->validator->validatePostcode($postcode);
+            $errors['country'] = $this->validator->validateCountry($country);
+
+            $errors = array_filter($errors); // Remove any non-errors
+
+            if (empty($errors)) {
+                // If there are no errors, save the address details
+                $this->saveUserAddress($addressLine1, $addressLine2, $city, $postcode, $country);
+
+                // Redirect to the next step or a confirmation page
+//                header('Location: registrationConfirmation');
+                exit;
+            }
+        }
+
+        return [
+            'template' => 'registerAddress.html.php',
+            'title' => 'Register Address',
+            'variables' => [
+                'errors' => $errors
+            ]
+        ];
+    }
+
+    private function saveUserAddress($addressLine1, $addressLine2, $city, $postcode, $country)
+    {
+        // Assuming you have a user's ID or email stored in the session
+        $userId = $_SESSION['user_id'] ?? null; // Replace with actual user identification logic
+
+        $addressData = [
+            'user_id' => $userId,
+            'address_line1' => $addressLine1,
+            'address_line2' => $addressLine2,
+            'city' => $city,
+            'postcode' => $postcode,
+            'country' => $country,
+        ];
+
+        // Save the address data in the database
+        $this->dbAddresses->insert($addressData);
+
+        // You can also store the address in the session if needed immediately after registration
+        $_SESSION['address_details'] = $addressData;
+    }
+
+
+
+    public function session()
+    {
+        if (!isset($_SESSION)) {
+            session_start();
         }
     }
+
 }

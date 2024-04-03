@@ -3,21 +3,18 @@
         <h2>Register</h2>
         <form action="" method="POST">
             <div class="form-group">
-                <label for="fullname">Firstname</label>
-                <input type="text" name="fullname" id="fullname" />
+                <label for="firstName">Firstname</label>
+                <input type="text" name="firstName" id="firstName" />
             </div>
 
             <div class="form-group">
-                <label for="username">Lastname</label>
-                <input type="text" name="username" id="username" />
+                <label for="lastName">Lastname</label>
+                <input type="text" name="lastName" id="lastName" />
             </div>
 
             <div class="form-group">
-                <label for="usertype">User Type</label>
-                <select name="usertype" id="usertype">
-                    <option value="ADMIN">ADMIN</option>
-                    <option value="CLIENT">CLIENT</option>
-                </select>
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" required />
             </div>
 
             <div class="form-group">

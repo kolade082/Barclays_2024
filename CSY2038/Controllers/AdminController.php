@@ -8,26 +8,23 @@ use CSY\MyPDO;
 class AdminController
 {
     private $dbUsers;
-    private $dbPat;
 
-    private $dbContact;
+    private $pdo; 
+    private array $get;
+    private array $post;
+    private Validations $validator;
 
     public function __construct(
         DatabaseTable $dbUsers,
-        DatabaseTable $dbPat,
-        DatabaseTable $dbContact,
         array $get,
         array $post
     ) {
         $myDb = new MyPDO();
         $this->pdo = $myDb->db();
         $this->dbUsers = $dbUsers;
-        $this->dbPat = $dbPat;
-        $this->dbContact = $dbContact;
         $this->get = $get;
         $this->post = $post;
-        $validator = new Validations();
-        $this->validator = $validator;
+        $this->validator = new Validations();
     }
 
     public function index()
@@ -35,7 +32,7 @@ class AdminController
         $this->session();
         $this->chklogin();
 
-        return ['template' => 'admin/index.html.php', 'title' => 'Admin', 'variables' => []];
+        return ['template' => 'index.html.php', 'title' => 'Home', 'variables' => []];
     }
 
 
@@ -44,148 +41,32 @@ class AdminController
         $this->session();
         $this->chklogin();
 
-        // Define the NHS Digital FHIR API sandbox endpoint
-        $apiUrl = "https://sandbox.api.service.nhs.uk/personal-demographics/FHIR/R4/Patient/9000000009";
-
-        // Set the request headers
-        $headers = [
-            "accept: application/fhir+json",
-            "authorization: Bearer g1112R_ccQ1Ebbb4gtHBP1aaaNM",
-            "nhsd-end-user-organisation-ods: Y12345",
-            "nhsd-session-urid: 555254240100",
-            "x-correlation-id: 11C46F5F-CDEF-4865-94B2-0EE0EDCC26DA",
-            "x-request-id: 60E0B220-8136-4CA5-AE46-1D97EF59D068",
-        ];
-        // Initialize cURL session
-        $ch = curl_init();
-
-        // Set cURL options
-        curl_setopt($ch, CURLOPT_URL, $apiUrl);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        $response = curl_exec($ch);
-
-        if(curl_errno($ch)){
-            echo 'Error Occurred: '. curl_error($ch);
-        }else {
-            // Decode the JSON response into a PHP array
-            $jsonArray = json_decode($response, true);
-
-            $nhsData = array();
-            $nhsData['id'] = $jsonArray['id'];
-            if (isset($jsonArray['name']) && is_array($jsonArray['name']) && count($jsonArray['name']) > 0) {
-                // Get the first element of the "name" array
-                $name = $jsonArray['name'][0];
-
-                // Check if "given" is present in the "name" element
-                if (isset($jsonArray['name']) && is_array($jsonArray['name']) && count($jsonArray['name']) > 0) {
-                    // Get the first element of the "name" array
-                    $name = $jsonArray['name'][0];
-
-                    // Check if "given" and "family" are present in the "name" element
-                    if (isset($name['given']) && is_array($name['given']) && count($name['given']) > 0
-                        && isset($name['family'])) {
-                        // Store "given" and "family" names in the selected data array
-                        $nhsData['firstname'] = implode(' ', $name['given']);
-                        $nhsData['lastname'] = $name['family'];
-                    }
-                }
-                if (isset($jsonArray['birthDate'])) {
-                    $nhsData['dob'] = $jsonArray['birthDate'];
-                }
-
-                // Check if "telecom" is present in the array
-                if (isset($jsonArray['telecom']) && is_array($jsonArray['telecom']) && count($jsonArray['telecom']) > 0) {
-                    foreach ($jsonArray['telecom'] as $contact) {
-                        // Check if "system" is "phone" or "email" and add to selected data
-                        if (isset($contact['system']) && isset($contact['value'])) {
-                            if ($contact['system'] == 'phone') {
-                                $nhsData['phone'] = $contact['value'];
-                            } elseif ($contact['system'] == 'email') {
-                                $nhsData['email'] = $contact['value'];
-                            }
-                        }
-                    }
-                }
-            }
-
-            // Output the response data
-
-            //Detect Anomalies:
-            $this->session();
-            $this->chklogin();
-
-            $patients = $this->dbPat->findAll();
-            $anomalies = [];
-            $html = '';
-            foreach ($patients as $patient) {
-
-                if ($patient['firstname'] != $nhsData['firstname'] ||
-                    $patient['lastname'] != $nhsData['lastname'] ||
-                    $patient['dob'] != $nhsData['dob'] ||
-                    $patient['phone_number'] != $nhsData['phone'] ||
-                    $patient['email'] != $nhsData['email']) {
-
-                    $anomalies[] = [
-                        'patientId' => $patient['id'],
-                        'yourData' => $patient,
-                        'nhsData' => $nhsData
-                    ];
-
-                    $html .= '<div class="anomaly-item">
-                    <div class="anomaly-description">
-                        <p>Anomaly Detected: Discrepancy in patient record for Patient ID ' . $patient['id'] . '</p>
-                    </div>
-                    <div class="view-details">
-                        <button onclick="viewDetails(this)"
-                                data-your-data="' . htmlspecialchars(json_encode($patient), ENT_QUOTES) . '"
-                                data-nhs-data="' . htmlspecialchars(json_encode($nhsData), ENT_QUOTES) . '">
-                            View Details
-                        </button>
-                    </div>
-                </div>';
-
-                }
-            }
-
-        }
-
         return [
             'template' => 'admin/dashboard.html.php',
             'title' => 'Dashboard',
-            'variables' => ['html' => $html
+            'variables' => [ // Add a 'variables' key to contain your additional data
+                'message' => 'Welcome to the Dashboard!' // The new variable
             ]
         ];
     }
 
 
-    public function patients()
-    {
-        $this->session();
-        $this->chklogin();
-        $patients = $this->dbPat->findAll();
-
-        return [
-            'template' => 'admin/patients.html.php',
-            'title' => 'Patients',
-            'variables' => ["patients" => $patients]
-        ];
-    }
 
     public function register()
     {
         $template = 'admin/register.html.php';
         $errors = [];
         if (isset($this->post['submit'])) {
-            $fullname = $this->post['fullname'] ?? '';
-            $username = $this->post['username'] ?? '';
+            $firstName = $this->post['firstName'] ?? '';
+            $lastName = $this->post['lastName'] ?? '';
+            $email = $this->post['email'] ?? '';
             $password = $this->post['password'] ?? '';
-            $usertype = $this->post['usertype'] ?? '';
+            $usertype = $this->post['usertype'] ?? 'customer';
 
             $errors = $this->validator->validateRegisterForm(
-                $fullname,
-                $username,
+                $firstName,
+                $lastName,
+                $email,
                 $password,
                 $usertype
             );
@@ -197,13 +78,14 @@ class AdminController
                 );
 
                 $register = [
-                    'fullname' => $this->post['fullname'],
-                    'username' => $this->post['username'],
+                    'firstName' => $firstName,
+                    'lastName' => $lastName,
+                    'email' => $email,
                     'password' => $password,
-                    'usertype' => $this->post['usertype']
+                    'usertype' => $usertype
                 ];
 
-                $registers = $this->dbUsers->insert($register);
+                $this->dbUsers->insert($register);
                 header('Location: users');
             }
         }
@@ -221,38 +103,43 @@ class AdminController
 
         if ($this->post) {
             if (isset($this->post['submit'])) {
-                $username = $this->post['username'] ?? '';
+                $email = $this->post['email'] ?? '';
                 $password = $this->post['password'] ?? '';
 
-                $errors = $this->validator->validateLoginForm($username, $password);
+                $errors = $this->validator->validateLoginForm($email, $password);
                 if (empty($errors)) {
-                    $admin = $this->dbUsers->find(
-                        "username",
-                        $this->post['username']
-                    );
-                    if ($admin) {
-                        $chkPassword = password_verify(
-                            $this->post['password'],
-                            $admin[0]["password"]
-                        );
+                    $user = $this->dbUsers->find("email", $this->post['email']);
+                    if ($user) {
+                        $chkPassword = password_verify($this->post['password'], $user[0]["password"]);
                         if ($chkPassword) {
-                            //  valid
+                            // Valid login
                             $this->session();
-                            $_SESSION['loggedin'] = $admin[0]['id'];
-                            $_SESSION['userDetails'] = $admin[0];
+                            $_SESSION['loggedin'] = $user[0]['id'];
+                            $_SESSION['userDetails'] = $user[0];
+                            $_SESSION['usertype'] = $user[0]['usertype']; // Store usertype in session
 
-                            header('Location: dashboard');
+                            // Redirect based on usertype
+                            if ($user[0]['usertype'] === 'admin') {
+                                header('Location: dashboard');
+                            } elseif ($user[0]['usertype'] === 'customer') {
+                                header('Location: index'); // Assuming 'index' is the route for the customer homepage
+                            } else {
+                                // Handle unexpected usertype
+                                $message = "Invalid User Type"; // You might want to handle this more gracefully
+                            }
+                            exit; // Ensure script execution ends here
                         } else {
-                            $message = "Invalid Cred"; // password
+                            $message = "Invalid Credentials"; // Incorrect password
                         }
                     } else {
-                        $message = "Invalid Cred"; // username
+                        $message = "Invalid Credentials"; // Email not found
                     }
                 }
             }
         }
         return [
-            'template' => $template, 'title' => 'login',
+            'template' => $template,
+            'title' => 'Login',
             'variables' => [
                 'errors' => $errors,
                 'message' => $message

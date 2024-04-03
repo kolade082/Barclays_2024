@@ -1,32 +1,27 @@
 <main>
-    <section class="welcome-section">
-        <h1>Welcome to Our NHS Service</h1>
-        <p>Providing dedicated healthcare services with excellence and compassion.</p>
+    <section class="hero">
+        <h1>Welcome to Barclays Credit</h1>
+        <p>Your partner in financial growth and security.</p>
+        <div class="hero-buttons">
+            <a href="../admin/login" class="hero-button">Login</a>
+            <a href="./registerEmail" class="hero-button hero-button-signup">Sign Up</a>
+        </div>
     </section>
-
-    <section class="services-overview">
-        <h2>Our Services</h2>
-        <ul>
-            <li><a href="service1.html">General Practice</a></li>
-            <li><a href="service2.html">Emergency Care</a></li>
-            <li><a href="service3.html">Specialist Consultations</a></li>
-            <!-- More services as needed -->
-        </ul>
-    </section>
-
-    <section class="news-updates">
-        <h2>Latest News</h2>
-        <article>
-            <h3>Healthcare Conference 2023</h3>
-            <p>Join us for our annual conference on healthcare innovation.</p>
-            <a href="news1.html">Read more...</a>
-        </article>
-        <!-- More news articles as needed -->
-    </section>
-
-    <section class="contact-info">
-        <h2>Contact Us</h2>
-        <p>Have questions? Reach out to our support team.</p>
-        <a href="contact.html">Contact Page</a>
+    <section class="services">
+        <div class="service-item">
+            <i class="fas fa-wallet service-icon"></i>
+            <h2>Personal Banking</h2>
+            <p>Experience tailored banking that understands you.</p>
+        </div>
+        <div class="service-item">
+            <i class="fas fa-briefcase service-icon"></i>
+            <h2>Business Banking</h2>
+            <p>Grow your business with our comprehensive financial solutions.</p>
+        </div>
+        <div class="service-item">
+            <i class="fas fa-chart-line service-icon"></i>
+            <h2>Wealth Management</h2>
+            <p>Secure your future with our expert wealth management services.</p>
+        </div>
     </section>
 </main>

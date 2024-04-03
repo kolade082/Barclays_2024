@@ -4,8 +4,8 @@
 
         <form action="" method="post">
             <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" name="username" id="username" placeholder="Enter your username" aria-label="Username" />
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" placeholder="Enter your email" aria-label="Email" />
             </div>
 
             <div class="form-group">
