@@ -40,6 +40,9 @@
     </div>
 </header>
     <div >
+        <div class="page-title">
+            <h1><?php $page_title ?? "" ?></h1>
+        </div>
         <?= $output ?? ""; ?>
     </div>
 

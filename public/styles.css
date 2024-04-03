@@ -31,7 +31,7 @@ header, .content, footer {
 
 header nav {
     background-color: #003087;
-    color: white;
+    color: light;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -464,4 +464,55 @@ footer {
 
 .btn-next:hover {
     background-color: #003087;
+}
+
+
+/* ====================dashboard design ====================== */
+
+.nav-panel{
+    grid-area: nav;
+}
+.dashboard-content{
+    grid-area: content;
+}
+.dashboard{
+    display: grid;
+    grid-template-columns: 20% 80%;
+    grid-template-rows: auto;
+    grid-template-areas: 
+    "nav content";
+}
+
+
+
+.nav-panel ul{
+    list-style: none;
+    padding: 0;
+}
+.nav-panel a{
+    display: block;
+    text-decoration: none;
+    color: #00a4eb;
+    background-color:#f4f4f4;
+    padding: 10px;
+    text-align: center;
+    font-size: calc(15px + 0.3567vw);
+    font-weight: bold;
+}
+.nav-panel a:hover{
+    background-color: #00a4eb;
+    color: white;
+}
+.nav-panel li{
+    width: 100%;
+}
+
+.selected{
+    background-color: #00a4eb;
+    color: white;
+}
+
+.dashboard-content{
+    min-height: 90vh;
+    
 }
