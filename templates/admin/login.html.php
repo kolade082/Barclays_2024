@@ -1,5 +1,5 @@
-<main class="main">
-    <section class="section-auth">
+<main class="content">
+    <div class="signup-container">
         <h2>Log in</h2>
 
         <form action="" method="post">
@@ -11,12 +11,13 @@
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" name="password" id="password" placeholder="Enter your password" aria-label="Password" />
+                <a href="#" class="forgot-password">Forgot password?</a>
             </div>
 
             <div class="form-group">
                 <input type="submit" name="submit" value="Log In" />
-                <a href="#" class="forgot-password">Forgot password?</a>
+                
             </div>
         </form>
-    </section>
+    </div>
 </main>
