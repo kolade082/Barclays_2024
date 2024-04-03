@@ -128,14 +128,9 @@ class Validations
         return ""; // No error
     }
 
-    public function validateCountry($country) {
-        // Assuming you have a list of countries
-        $validCountries = ['United Kingdom', 'United States', 'Canada']; // etc...
-        if (empty($country)) {
-            return "Country is required.";
-        }
-        if (!in_array($country, $validCountries)) {
-            return "Invalid country selected.";
+    public function validateCounty($county) {
+        if (empty($county)) {
+            return "County is required.";
         }
         return ""; // No error
     }

@@ -65,5 +65,9 @@ class DatabaseTable
         $stmt->execute($criteria);
         return $stmt->fetchAll();
     }
+    public function getLastInsertedId()
+    {
+        return $this->pdo->lastInsertId();
+    }
 
 }

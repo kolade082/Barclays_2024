@@ -347,7 +347,7 @@ footer {
 
 .form-group label {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 5px;
 }
 
 .form-group input[type="text"],
@@ -445,16 +445,50 @@ footer {
     border-radius: 4px;
 }
 
-.manual-entry-link {
-    margin-top: 1rem;
-    text-align: right;
+#getaddress_input {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+#getaddress_button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+#getaddress_dropdown {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #f0f0f0;
+}
+#findAddress:hover {
+    background-color: #007cba;
+}
+
+.hidden {
+    display: none;
 }
 
 .manual-entry-link a {
     color: #00a4eb;
     text-decoration: none;
+    cursor: pointer;
 }
 
+.manual-entry-link {
+    margin-top: 20px;
+}
 .btn-next {
     background-color: #0056b3;
     color: white;
@@ -471,3 +505,46 @@ footer {
 .hidden {
     display: none;
 }
+
+
+.work-and-income-container {
+    width: 100%;
+    max-width: 80%;
+    min-height: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/*.work-and-income-form .form-group {*/
+/*    margin-bottom: 20px;*/
+/*}*/
+
+/*.work-and-income-form .form-group label {*/
+/*    display: block;*/
+/*    margin-bottom: 5px;*/
+/*}*/
+
+/*.work-and-income-form .form-group input,*/
+/*.work-and-income-form .form-group select {*/
+/*    width: 100%;*/
+/*    padding: 10px;*/
+/*    border-radius: 4px;*/
+/*    border: 1px solid #ccc;*/
+/*}*/
+
+/*.btn-next {*/
+/*    background-color: #007bff;*/
+/*    color: white;*/
+/*    padding: 10px 15px;*/
+/*    border: none;*/
+/*    border-radius: 4px;*/
+/*    cursor: pointer;*/
+/*    font-size: 16px;*/
+/*}*/
+
+/*.btn-next:hover {*/
+/*    background-color: #0056b3;*/
+/*}*/

@@ -11,19 +11,22 @@ class PageController
     private $pdo;
 
     private DatabaseTable $dbUsers;
-    // private MyPDO $pdo; 
+    private DatabaseTable $dbAddresses;
+
     private array $get;
     private array $post;
     private Validations $validator;
 
     public function __construct(
         DatabaseTable $dbUsers,
+        DatabaseTable $dbAddresses,
         array $get,
         array $post
     ) {
         $myDb = new MyPDO();
         $this->pdo = $myDb->db();
         $this->dbUsers = $dbUsers;
+        $this->dbAddresses = $dbAddresses;
         $this->get = $get;
         $this->post = $post;
         $this->validator = new Validations();
@@ -134,7 +137,8 @@ class PageController
 //        var_dump($userData);
 
         $this->dbUsers->insert($userData);
-
+        $userId = $this->dbUsers->getLastInsertedId();
+        $_SESSION['user_id'] = $userId;
         $_SESSION['personal_details_set'] = true;
     }
 
@@ -150,26 +154,27 @@ class PageController
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Collect address details from POST data
-            $addressLine1 = $this->post['address-line1'] ?? '';
-            $addressLine2 = $this->post['address-line2'] ?? ''; // Optional
+            $addressLine1 = $this->post['address_line1'] ?? '';
+            $addressLine2 = $this->post['address_line2'] ?? ''; // Optional
             $city = $this->post['city'] ?? '';
             $postcode = $this->post['postcode'] ?? '';
-            $country = $this->post['country'] ?? '';
+            $county = $this->post['county'] ?? '';
+
 
             // Validate the address details
-            $errors['address-line1'] = $this->validator->validateAddressLine($addressLine1);
+            $errors['address_line1'] = $this->validator->validateAddressLine($addressLine1);
             $errors['city'] = $this->validator->validateCity($city);
             $errors['postcode'] = $this->validator->validatePostcode($postcode);
-            $errors['country'] = $this->validator->validateCountry($country);
+            $errors['county'] = $this->validator->validateCounty($county);
 
             $errors = array_filter($errors); // Remove any non-errors
 
             if (empty($errors)) {
                 // If there are no errors, save the address details
-                $this->saveUserAddress($addressLine1, $addressLine2, $city, $postcode, $country);
+                $this->saveUserAddress($addressLine1, $addressLine2, $city, $postcode, $county);
 
                 // Redirect to the next step or a confirmation page
-//                header('Location: registrationConfirmation');
+                header('Location: workAndIncome');
                 exit;
             }
         }
@@ -183,18 +188,18 @@ class PageController
         ];
     }
 
-    private function saveUserAddress($addressLine1, $addressLine2, $city, $postcode, $country)
+    private function saveUserAddress($addressLine1, $addressLine2, $city, $postcode, $county)
     {
-        // Assuming you have a user's ID or email stored in the session
-        $userId = $_SESSION['user_id'] ?? null; // Replace with actual user identification logic
 
+        $userId = $_SESSION['user_id'] ?? null;
+//        var_dump($userId);
         $addressData = [
             'user_id' => $userId,
             'address_line1' => $addressLine1,
             'address_line2' => $addressLine2,
             'city' => $city,
             'postcode' => $postcode,
-            'country' => $country,
+            'country' => $county,
         ];
 
         // Save the address data in the database
@@ -204,7 +209,10 @@ class PageController
         $_SESSION['address_details'] = $addressData;
     }
 
-
+    public function workAndIncome()
+    {
+        return ['template' => 'workAndIncome.html.php', 'title' => 'Work and Income', 'variables' => []];
+    }
 
     public function session()
     {
