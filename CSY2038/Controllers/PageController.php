@@ -129,10 +129,9 @@ class PageController
             'first_name' => $firstName,
             'last_name' => $lastName,
             'date_of_birth' => $dob,
-            'password' => $hashedPassword,
-            'user_type'=> 'USER'
+            'password' => $hashedPassword
         ];
-//        var_dump($userData);
+        var_dump($userData);
 
         $this->dbUsers->insert($userData);
 

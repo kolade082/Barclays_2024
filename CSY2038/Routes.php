@@ -15,6 +15,7 @@ class Routes implements \CSY\Routes
 
         $databaseUsers = new DatabaseTable($pdo, 'users', 'id');
         $pageController = new PageController($databaseUsers, $_GET, $_POST);
+        
         $page = $pageController->home();
         if ($_SERVER['REQUEST_URI'] !== '/') {
             $functionName = ltrim(explode('?', $_SERVER['REQUEST_URI'])[0], '/');
