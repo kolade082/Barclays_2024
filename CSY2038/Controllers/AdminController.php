@@ -30,7 +30,7 @@ class AdminController
     public function index()
     {
         $this->session();
-        $this->chklogin();
+        //$this->chklogin();
 
         return ['template' => 'index.html.php', 'title' => 'Home', 'variables' => []];
     }
@@ -39,7 +39,7 @@ class AdminController
     public function dashboard()
     {
         $this->session();
-        $this->chklogin();
+        //$this->chklogin();
 
         return [
             'template' => 'admin/dashboard.html.php',

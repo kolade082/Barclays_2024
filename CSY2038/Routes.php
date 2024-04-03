@@ -14,6 +14,7 @@ class Routes implements \CSY\Routes
         $pdo = $myDb->db();
 
         $databaseUsers = new DatabaseTable($pdo, 'users', 'id');
+
         $databaseAddresses = new DatabaseTable($pdo, 'addresses', 'id');
         $pageController = new PageController($databaseUsers, $databaseAddresses, $_GET, $_POST);
         $page = $pageController->home();
