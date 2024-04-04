@@ -64,7 +64,7 @@ $excludeNavLinks = true;
 
 
 
-            <button type="submit" name="submit" class="btn-signup">Create my free account</button>
+            <button type="submit" name="submit" class="btn-signup">Next</button>
         </form>
     </div>
 </main>

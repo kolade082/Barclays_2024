@@ -3,8 +3,8 @@
         <h1>Welcome to Barclays Credit</h1>
         <p>Your partner in financial growth and security.</p>
         <div class="hero-buttons">
-            <a href="../admin/login" class="hero-button">Login</a>
-            <a href="./registerEmail" class="hero-button hero-button-signup">Sign Up</a>
+<!--            <a href="../admin/login" class="hero-button">Login</a>-->
+            <a href="./registerEmail" class="hero-button hero-button-signup">Apply Here!</a>
         </div>
     </section>
     <section class="services">

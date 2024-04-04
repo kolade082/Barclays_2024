@@ -1,22 +1,19 @@
-<main class="main">
-    <section class="section-auth">
-        <h2>Log in</h2>
-
-        <form action="" method="post">
+<main class="content">
+    <div class="signup-container">
+        <form action="" method="post" class="signup-form">
+            <h2>Sign in</h2>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" name="email" id="email" placeholder="Enter your email" aria-label="Email" />
+                <input type="email" name="email" id="email" placeholder="Enter your email"  />
             </div>
-
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" name="password" id="password" placeholder="Enter your password" aria-label="Password" />
+                <input type="password" name="password" id="password" placeholder="Enter your password" />
             </div>
-
-            <div class="form-group">
-                <input type="submit" name="submit" value="Log In" />
-                <a href="#" class="forgot-password">Forgot password?</a>
+            <button type="submit" name="submit" class="btn-signup">Log In</button>
+            <div class="login-link">
+                Already registered? <a href="../admin/login">Forgot Password</a>
             </div>
         </form>
-    </section>
+    </div>
 </main>

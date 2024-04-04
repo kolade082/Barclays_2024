@@ -10,7 +10,7 @@
     <!-- bootstrap import -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../styles.css" media="screen">
     <title>Barclays Credit</title>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -21,7 +21,9 @@
     <div>
         <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) : ?>
             <div class="logo">
-                <a href="/" style="text-decoration: none; color: inherit;">Barclays Credit</a>
+                <a href="/" style="text-decoration: none; color: inherit;">
+                    <img src="../images/logo.png" alt="Barclays Credit Logo" style="height: 80px;">
+                </a>
             </div>
 
             <div class="nav-links">
@@ -30,16 +32,20 @@
             </div>
         <?php else : ?>
             <div class="logo">
-                <a href="/" style="text-decoration: none; color: inherit;">Barclays Credit</a>
+                <a href="/" style="text-decoration: none; color: inherit;">
+                    <img src="../images/logo.png" alt="Barclays Credit Logo" style="height: 80px;">
+                </a>
+
+                <div class="nav-links">
+<!--                <p><a href="./registerEmail">Sign Up</a></p>-->
+<!--                <p><a href="../admin/login">Login</a></p>-->
+                </div>
             </div>
-            <div class="nav-links">
-                <p><a href="./registerEmail">Sign Up</a></p>
-                <p><a href="../admin/login">Login</a></p>
-            </div>
+
         <?php endif; ?>
     </div>
 </header>
-    <div >
+    <div>
         <?= $output ?? ""; ?>
     </div>
 
@@ -67,9 +73,9 @@
         </button>
     </div>
 
-<footer>
-    <p>© 2024 Barclays Credit. All Rights Reserved.</p>
-</footer>
+<!--<footer>-->
+<!--    <p>© 2024 Barclays Credit. All Rights Reserved.</p>-->
+<!--</footer>-->
     <!-- bootstrap import -->
 <!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"-->
 <!--            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"-->
