@@ -53,24 +53,21 @@ class PageController
         return ['template' => 'about.html.php', 'title' => 'About', 'variables' => []];
     }
 
-    public function registerEmail()
-    {
-        $this->session();
-        $errors = [];
+public function registerEmail()
+{
+    $this->session();
+    $errors = [];
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($this->post['email'])) {
-//            var_dump($_POST);
-            $email = $this->post['email'] ?? '';
-            $errors = $this->validator->validateEmail($email);
-//            var_dump($email, $errors);
-            if (empty($errors)) {
-                $_SESSION['registration_email'] = $email;
-//                var_dump($_SESSION);
-                header('Location: registerPersonalDet');
-//                var_dump('Redirecting to registerPersonalDet');
-                exit;
-            }
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($this->post['email'])) {
+        $email = $this->post['email'] ?? '';
+        $errors = $this->validator->validateEmail($email);
+
+        if (empty($errors)) {
+            $_SESSION['registration_email'] = $email;
+            header('Location: registerPersonalDet');
+            exit;
         }
+    }
 
         return [
             'template' => 'registerEmail.html.php',
