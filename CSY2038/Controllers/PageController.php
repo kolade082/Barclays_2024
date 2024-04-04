@@ -306,7 +306,6 @@ class PageController
         $creditScore = $this->calculateCreditScore($userDetails);
         $affordabilityScore = $this->calculateAffordabilityScore($userDetails);
         $checkMatchToDataSet = $this->checkData($userDetails);
-        $_SESSION['credit'] = $creditScore;
         // Logic to decide eligibility
         if ($creditScore < 560 || $affordabilityScore < 40 || $checkMatchToDataSet == false) {
             $eligibilityOutcome = "Unfortunately, based on our assessment, you're not eligible for a credit card.";
@@ -434,8 +433,6 @@ class PageController
     public function outcomePage() {
         $this->session();
         $eligibilityOutcome = $_SESSION['eligibilityOutcome'] ?? 'Your session has expired or you directly accessed this page. Please start over.';
-        var_dump($_SESSION['data_matched']);
-        var_dump($_SESSION['credit']);
         // Optionally clear the outcome from the session to prevent it from being reused if the page is refreshed
         unset($_SESSION['eligibilityOutcome']);
 
