@@ -62,7 +62,7 @@ header nav {
 
 header div:last-child {
     display: flex;
-    margin-top: 28px;
+    align-items: flex-end;
 }
 
 .hero {
