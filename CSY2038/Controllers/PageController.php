@@ -14,7 +14,7 @@ class PageController
     private DatabaseTable $dbAddresses;
     private DatabaseTable $dbWorkAndIncome;
     private DatabaseTable $dbApplications;
-
+    private DatabaseTable $dbCreditData;
     private array $get;
     private array $post;
     private Validations $validator;
@@ -24,6 +24,7 @@ class PageController
         DatabaseTable $dbAddresses,
         DatabaseTable $dbWorkAndIncome,
         DatabaseTable $dbApplications,
+        DatabaseTable $dbCreditData,
         array $get,
         array $post
     ) {
@@ -36,6 +37,8 @@ class PageController
         $this->validator = new Validations();
         $this->dbWorkAndIncome = $dbWorkAndIncome;
         $this->dbApplications = $dbApplications;
+        $this->dbCreditData = $dbCreditData;
+
     }
 
     public function home()
