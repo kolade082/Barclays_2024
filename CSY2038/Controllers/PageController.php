@@ -304,24 +304,49 @@ class PageController
 //        var_dump($userDetails);
         $creditScore = $this->calculateCreditScore($userDetails);
         $affordabilityScore = $this->calculateAffordabilityScore($userDetails);
-
+        $checkMatchToDataSet = $this->checkData($userDetails);
+        $_SESSION['credit'] = $creditScore;
         // Logic to decide eligibility
-        if ($creditScore < 560 || $affordabilityScore < 40) {
+        if ($creditScore < 560 || $affordabilityScore < 40 || $checkMatchToDataSet == false) {
             $eligibilityOutcome = "Unfortunately, based on our assessment, you're not eligible for a credit card.";
             $this->finalizeApplication($userId, 'Declined', $creditScore, $affordabilityScore);
-        } elseif ($creditScore < 800 || $affordabilityScore < 60) {
+        } elseif ($creditScore < 800 || $affordabilityScore < 60 && $checkMatchToDataSet == true) {
             $eligibilityOutcome = "Your application is under review.";
             $this->finalizeApplication($userId, 'Under Review', $creditScore, $affordabilityScore);
-        } else {
+        } elseif ($checkMatchToDataSet == true) {
             $eligibilityOutcome = "Congratulations, you're eligible for a credit card!";
             $this->finalizeApplication($userId, 'Approved', $creditScore, $affordabilityScore);
         }
+        $_SESSION['data_matched'] = $checkMatchToDataSet;
 
         $_SESSION['eligibilityOutcome'] = $eligibilityOutcome;
         header('Location: outcomePage');
         exit;
     }
+    
+    private function checkData($userDetails){
+        
+        try{
+            $userid = intval($_SESSION['user_id']);
+            $data = $this->dbCreditData->find('email', $this->dbUsers->find('id', $userid)[0]['email']);    
+        }catch(\Exception $e){
+            return false;
+        }
+        
+        if(
+            strval($data[0]['annual_income']) == $userDetails['annual_income'] &&
+            strval($data[0]['housing_status']) == $userDetails['housing_status'] &&
+            strval($data[0]['employment_status']) == $userDetails['employment_status'] &&
+            strval($data[0]['occupation']) == $userDetails['occupation'] &&
+            strval($data[0]['monthly_outgoings']) == $userDetails['monthly_outgoings']
+        ){
+            return true;
+        } else {
+            return false;
+        }
+        
 
+    }
 
     private function calculateCreditScore($userDetails) {
         $baseScore = 300;
@@ -408,7 +433,8 @@ class PageController
     public function outcomePage() {
         $this->session();
         $eligibilityOutcome = $_SESSION['eligibilityOutcome'] ?? 'Your session has expired or you directly accessed this page. Please start over.';
-
+        var_dump($_SESSION['data_matched']);
+        var_dump($_SESSION['credit']);
         // Optionally clear the outcome from the session to prevent it from being reused if the page is refreshed
         unset($_SESSION['eligibilityOutcome']);
 
