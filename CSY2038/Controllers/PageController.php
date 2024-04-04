@@ -206,6 +206,7 @@ class PageController
 
 
 
+
     public function session()
     {
         if (!isset($_SESSION)) {
