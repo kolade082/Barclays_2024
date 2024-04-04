@@ -13,6 +13,7 @@ class AdminController
     private array $get;
     private array $post;
     private DatabaseTable $dbApplications;
+    private DatabaseTable $dbCreditData;
     private Validations $validator;
 
     public function __construct(
@@ -20,6 +21,7 @@ class AdminController
         DatabaseTable $dbAddresses,
         DatabaseTable $dbWorkAndIncome,
         DatabaseTable $dbApplications,
+        DatabaseTable $dbCreditData,
         array $get,
         array $post
     ) {
@@ -30,6 +32,7 @@ class AdminController
         $this->post = $post;
         $this->validator = new Validations();
         $this->dbApplications = $dbApplications;
+        $this->dbCreditData = $dbCreditData;
     }
 
     public function index()
