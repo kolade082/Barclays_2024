@@ -95,18 +95,25 @@ class AdminController
     }
 
     public function updateApplicationStatus() {
-        error_log("updateApplicationStatus called");
-        error_log("POST data: " . print_r($_POST, true));
         $applicationId = $_POST['applicationId'] ?? null;
         $newStatus = $_POST['newStatus'] ?? null;
-var_dump($applicationId);
-        if (in_array($newStatus, ['Approved', 'Declined'])) {
-            $this->dbApplications->updateStatus($applicationId, $newStatus);
-            header('Location: dashboard');
-        } else {
 
+        // Prepare the record for update
+        $record = [
+            'status' => $newStatus,
+        ];
+
+        if (in_array($newStatus, ['Approved', 'Declined'])) {
+            // Update the status using the generic update method
+            $this->dbApplications->updateWithId($record, $applicationId);
+//            var_dump($this->dbApplications);
+            header('Location: dashboard');
+            exit; // Always a good practice to call exit after headers for a redirect
+        } else {
+            // Handle invalid status update attempt
         }
     }
+
 
     public function login()
     {

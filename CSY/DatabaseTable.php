@@ -25,7 +25,7 @@ class DatabaseTable
     }
     public function fetchAllApplicationDetails() {
         $sql = "SELECT 
-              apps.*, 
+              apps.id as appsId,apps.*, 
               users.*, 
               addresses.address_line1, addresses.city, addresses.postcode, addresses.country,
               work_and_income.occupation, work_and_income.employer, work_and_income.annual_income, work_and_income.credit_approval, 
@@ -43,11 +43,15 @@ class DatabaseTable
         return $stmt->fetchAll();
     }
 
-    public function updateStatus($applicationId, $newStatus) {
-        $stmt = $this->pdo->prepare("UPDATE applications SET status = :newStatus WHERE id = :applicationId");
-        $stmt->execute(['newStatus' => $newStatus, 'applicationId' => $applicationId]);
-    }
 
+//    public function updateStatus($applicationId, $newStatus) {
+//        $stmt = $this->pdo->prepare("UPDATE applications SET status = :status WHERE id = :id");
+//        $stmt->execute(['status' => $newStatus, 'id' => $applicationId]);
+//    }
+    public function updateStatus($applicationId, $newStatus) {
+        $stmt = $this->pdo->prepare('UPDATE ' . $this->table . ' SET status = :status WHERE id = :id');
+        $stmt->execute(['status' => $newStatus, 'id' => $applicationId]);
+    }
 
     public function delete($field, $value): void
     {
@@ -85,8 +89,25 @@ class DatabaseTable
         $record['primaryKey'] = $record[$this->primaryKey];
         $stmt = $this->pdo->prepare($query);
         $stmt->execute($record);
+
     }
 
+    public function updateWithId($record, $id): void
+    {
+        $query = 'UPDATE ' . $this->table . ' SET ';
+        $parameters = [];
+        foreach ($record as $key => $value) {
+            $parameters[] = $key . ' = :' . $key;
+        }
+        $query .= implode(', ', $parameters);
+        $query .= ' WHERE id = :primaryKey';
+//        var_dump($query);
+        $record['primaryKey'] = $id;
+//        var_dump($record, $id);
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute($record);
+
+    }
     public function save($record): void {
         if (isset($record[$this->primaryKey])) {
             // Check if the record exists
